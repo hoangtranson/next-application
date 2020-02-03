@@ -2,7 +2,7 @@ import React from 'react';
 import Router from 'next/router';
 import fetch from 'isomorphic-unfetch';
 import nextCookie from 'next-cookies';
-import Layout from '../components/layout';
+import Layout from '../components/layout.login';
 import { withAuthSync } from '../utils/auth.util';
 import getHost from '../utils/host.util';
 
@@ -15,28 +15,6 @@ const Profile = props => {
             <h1>{name}</h1>
             <p className="lead">{login}</p>
             <p>{bio}</p>
-
-            <style jsx>{`
-        img {
-          max-width: 200px;
-          border-radius: 0.5rem;
-        }
-
-        h1 {
-          margin-bottom: 0;
-        }
-
-        .lead {
-          margin-top: 0;
-          font-size: 1.5rem;
-          font-weight: 300;
-          color: #666;
-        }
-
-        p {
-          color: #6a737d;
-        }
-      `}</style>
         </Layout>
     )
 }
