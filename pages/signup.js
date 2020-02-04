@@ -3,7 +3,7 @@ import fetch from 'isomorphic-unfetch';
 import Layout from '../components/layout';
 import { login } from '../utils/auth.util';
 
-const loginPage = () => {
+const signupPage = () => {
     const [userData, setUserData] = useState({ username: '', password: '', error: '' });
 
     const handleSubmit = async event => {
@@ -12,7 +12,7 @@ const loginPage = () => {
 
         const username = userData.username;
         const password = userData.password;
-        const url = '/api/login';
+        const url = '/api/signup';
 
         if (username && password) {
             try {
@@ -22,8 +22,8 @@ const loginPage = () => {
                     body: JSON.stringify({ username, password }),
                 })
                 if (response.status === 200) {
-                    const { username, password } = await response.json();
-                    await login({ token: password, username });
+                    const { token } = await response.json();
+                    await login({ token });
                 } else {
                     console.log('Login failed.');
                     let error = new Error(response.statusText);
@@ -43,7 +43,7 @@ const loginPage = () => {
     return (
         <Layout>
             <form className="form-signin text-center" onSubmit={handleSubmit}>
-                <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
+                <h1 className="h3 mb-3 font-weight-normal">Please sign up</h1>
                 <label htmlFor="username" className="sr-only">User Name</label>
                 <input
                     type="text"
@@ -71,11 +71,11 @@ const loginPage = () => {
                         )
                     }
                 />
-                <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-                <a href="/signup">Signup new account?</a>
+
+                <button className="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
             </form>
         </Layout>
     )
 }
 
-export default loginPage
+export default signupPage;

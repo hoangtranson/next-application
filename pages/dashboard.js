@@ -3,10 +3,10 @@ import Router from 'next/router';
 import fetch from 'isomorphic-unfetch';
 import nextCookie from 'next-cookies';
 import Layout from '../components/layout.login';
-import { withAuthSync } from '../utils/auth.util';
 import getHost from '../utils/host.util';
+import { withAuthSync } from '../utils/auth.util';
 
-const dashboard = props => {
+const dashboardPage = props => {
     const { name } = props.data;
 
     return (
@@ -16,8 +16,8 @@ const dashboard = props => {
     )
 }
 
-dashboard.getInitialProps = async ctx => {
-    const { token } = nextCookie(ctx);
+dashboardPage.getInitialProps = async ctx => {
+    const { token, username } = nextCookie(ctx);
     const apiUrl = getHost(ctx.req) + '/api/profile';
 
     const redirectOnError = () =>
@@ -33,7 +33,7 @@ dashboard.getInitialProps = async ctx => {
         const response = await fetch(apiUrl, {
             credentials: 'include',
             headers: {
-                Authorization: JSON.stringify({ token }),
+                Authorization: JSON.stringify({ token, username }),
             },
         })
 
@@ -48,4 +48,4 @@ dashboard.getInitialProps = async ctx => {
     }
 }
 
-export default withAuthSync(dashboard)
+export default withAuthSync(dashboardPage);

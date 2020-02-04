@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from '../components/layout';
 import Footer from '../components/Footer';
 
-const Home = () => (
+const homePage = () => (
   <Layout>
     <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
       <h1 className="display-4">Pricing</h1>
@@ -64,4 +64,4 @@ const Home = () => (
   </Layout>
     )
     
-export default Home;
+export default homePage;

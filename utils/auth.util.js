@@ -3,8 +3,9 @@ import Router from 'next/router';
 import nextCookie from 'next-cookies';
 import cookie from 'js-cookie';
 
-export const login = ({ token }) => {
+export const login = ({ token, username }) => {
     cookie.set('token', token, { expires: 1 });
+    cookie.set('username', username, { expires: 1 });
     Router.push('/dashboard');
 }
 
@@ -25,6 +26,7 @@ export const auth = ctx => {
 }
 
 export const logout = () => {
+    cookie.remove('token');
     cookie.remove('token');
     // to support logging out from all windows
     window.localStorage.setItem('logout', Date.now());
