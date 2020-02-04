@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-unfetch';
+import { User } from '../../models';
 
 export default async (req, res) => {
     const { username } = await req.body;
