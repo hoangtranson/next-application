@@ -7,11 +7,37 @@ import getHost from '../utils/host.util';
 import { withAuthSync } from '../utils/auth.util';
 
 const dashboardPage = props => {
-    const { name } = props.data;
-
     return (
         <Layout>
-            <h1>{name}</h1>
+            <form className="form-signin text-center">
+                <h1 className="h3 mb-3 font-weight-normal">Hi {props.data.username}!</h1>
+                <p>Update your profile here</p>
+                <label htmlFor="username" className="sr-only">User Name</label>
+                <input
+                    type="text"
+                    id="username"
+                    className="form-control"
+                    placeholder="User Name"
+                />
+
+                <label htmlFor="inputPassword" className="sr-only">Password</label>
+                <input
+                    type="password"
+                    id="inputPassword"
+                    className="form-control"
+                    placeholder="Password"
+                />
+
+                <label htmlFor="avatar" className="sr-only">Avatar</label>
+                <input
+                    type="file"
+                    id="avatar"
+                    className="form-control"
+                    placeholder="Password"
+                />
+
+                <button className="btn btn-lg btn-primary btn-block" type="submit">Update</button>
+            </form>
         </Layout>
     )
 }

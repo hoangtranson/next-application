@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-unfetch';
+import { User } from '../../models';
 
 export default async (req, res) => {
     if (!('authorization' in req.headers)) {
@@ -8,33 +8,21 @@ export default async (req, res) => {
     const auth = await req.headers.authorization;
     const { token, username } = JSON.parse(auth);
 
-    if(token || username) {
+    if(!token || !username) {
         return res.status(401).send('You are not authorized.');
     }
-    const data = {
-        name:'123'
+    
+    try {
+        const user = await User.where({ 'username': username, 'password': token}).fetch({ require: true });
+
+        if (!user) {
+            return res.status(404).json({ message: "Your username is not corrected!" });
+        }
+
+        return res.status(200).json(user);
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "error" })
     }
-    return res.status(200).json(data);
-    // try {
-    //     const { token } = JSON.parse(auth);
-    //     const url = `https://api.github.com/user/${token}`;
-
-    //     const response = await fetch(url);
-
-    //     if (response.ok) {
-    //         const js = await response.json();
-    //         // Need camelcase in the frontend
-    //         const data = Object.assign({}, { avatarUrl: js.avatar_url }, js);
-    //         return res.status(200).json({ data });
-    //     } else {
-    //         const error = new Error(response.statusText);
-    //         error.response = response;
-    //         throw error;
-    //     }
-    // } catch (error) {
-    //     const { response } = error;
-    //     return response
-    //         ? res.status(response.status).json({ message: response.statusText })
-    //         : res.status(400).json({ message: error.message });
-    // }
 }

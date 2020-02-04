@@ -14,9 +14,3 @@ const bookshelf = require('bookshelf')(knex);
 export const User = bookshelf.model('User', {
     tableName: 'users'
 });
-
-const Todos = bookshelf.model('Post', {
-    tableName: 'todos',
-    hasTimestamps: true,
-    hasTimestamps: ['created_at', 'updated_at']
-});
