@@ -6,20 +6,17 @@ import Layout from '../components/layout.login';
 import { withAuthSync } from '../utils/auth.util';
 import getHost from '../utils/host.util';
 
-const Profile = props => {
-    const { name, login, bio, avatarUrl } = props.data;
+const dashboard = props => {
+    const { name } = props.data;
 
     return (
         <Layout>
-            <img src={avatarUrl} alt="Avatar" />
             <h1>{name}</h1>
-            <p className="lead">{login}</p>
-            <p>{bio}</p>
         </Layout>
     )
 }
 
-Profile.getInitialProps = async ctx => {
+dashboard.getInitialProps = async ctx => {
     const { token } = nextCookie(ctx);
     const apiUrl = getHost(ctx.req) + '/api/profile';
 
@@ -27,6 +24,10 @@ Profile.getInitialProps = async ctx => {
         typeof window !== 'undefined'
             ? Router.push('/login')
             : ctx.res.writeHead(302, { Location: '/login' }).end()
+
+    if (!token) {
+        return redirectOnError();
+    }
 
     try {
         const response = await fetch(apiUrl, {
@@ -37,15 +38,14 @@ Profile.getInitialProps = async ctx => {
         })
 
         if (response.ok) {
-            const js = await response.json();
-            console.log('js', js);
-            return js;
+            const data = await response.json();
+            return { data };
         } else {
-            return await redirectOnError()
+            return redirectOnError();
         }
     } catch (error) {
-        return redirectOnError()
+        return redirectOnError();
     }
 }
 
-export default withAuthSync(Profile)
+export default withAuthSync(dashboard)

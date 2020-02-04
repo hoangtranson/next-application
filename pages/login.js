@@ -4,43 +4,40 @@ import Layout from '../components/layout';
 import { login } from '../utils/auth.util';
 
 const Login = () => {
-    const [userData, setUserData] = useState({ username: '', error: '' });
+    const [userData, setUserData] = useState({ username: '', password: '', error: '' });
 
     const handleSubmit = async event => {
         event.preventDefault();
         setUserData(Object.assign({}, userData, { error: '' }));
 
         const username = userData.username;
+        const password = userData.password;
         const url = '/api/login';
 
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username }),
-            })
-            if (response.status === 200) {
-                const { token } = await response.json();
-                await login({ token });
-            } else {
-                console.log('Login failed.');
-                let error = new Error(response.statusText);
-                error.response = response;
-                throw error;
-            }
-        } catch (error) {
-            console.error(
-                'You have an error in your code or there are Network issues.',
-                error
-            );
-
-            const { response } = error;
-            setUserData(
-                Object.assign({}, userData, {
-                    error: response ? response.statusText : error.message,
+        if (username && password) {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password }),
                 })
-            )
+                if (response.status === 200) {
+                    const { token } = await response.json();
+                    await login({ token });
+                } else {
+                    console.log('Login failed.');
+                    let error = new Error(response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            } catch (error) {
+                console.error(
+                    'You have an error in your code or there are Network issues.',
+                    error
+                );
+            }
         }
+
     }
 
     return (
@@ -60,8 +57,21 @@ const Login = () => {
                         )
                     }
                 />
+
                 <label htmlFor="inputPassword" className="sr-only">Password</label>
-                <input type="password" id="inputPassword" className="form-control" placeholder="Password" required="" />
+                <input
+                    type="password"
+                    id="inputPassword"
+                    className="form-control"
+                    placeholder="Password"
+                    value={userData.password}
+                    onChange={event =>
+                        setUserData(
+                            Object.assign({}, userData, { password: event.target.value })
+                        )
+                    }
+                />
+
                 <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
             </form>
         </Layout>

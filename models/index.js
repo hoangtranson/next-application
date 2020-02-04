@@ -1,10 +1,10 @@
 const knex = require('knex')({
-    client: 'sql',
+    client: 'pg',
     connection: {
         host: '127.0.0.1',
         user: 'postgres',
         password: 'admin',
-        database: 'template1',
+        database: 'nextapp',
         charset: 'utf8'
     }
 });
@@ -12,10 +12,7 @@ const knex = require('knex')({
 const bookshelf = require('bookshelf')(knex);
 
 export const User = bookshelf.model('User', {
-    tableName: 'users',
-    todos() {
-        return this.hasMany(Todos)
-    }
+    tableName: 'users'
 });
 
 const Todos = bookshelf.model('Post', {

@@ -1,26 +1,15 @@
 import fetch from 'isomorphic-unfetch';
 import { User } from '../../models';
 
+const _TOKEN = "ZnN5cWhQR2JBRzBTR3pselljQlQ3QVZzc1Fqcm1RSHY6ZHZJY3RHclNoTXFJQXVDbw";
+
+// TODO install jwt and bscryptjs to generate dynamic token with expire time when user do login
 export default async (req, res) => {
-    const { username } = await req.body;
-    console.log('username', username);
-    const url = `https://api.github.com/users/${username}`;
-
+    const { username, password } = await req.body;
     try {
-        const response = await fetch(url);
-
-        if (response.ok) {
-            const { id } = await response.json();
-            return res.status(200).json({ token: id });
-        } else {
-            const error = new Error(response.statusText);
-            error.response = response;
-            throw error;
-        }
-    } catch (error) {
-        const { response } = error;
-        return response
-            ? res.status(response.status).json({ message: response.statusText })
-            : res.status(400).json({ message: error.message });
+        const user = await User.where({ 'username': username, 'password': password }).fetch({ require: true });
+        return res.status(200).json({user, token: _TOKEN});
+    } catch (err) {
+        return res.status(404).json({ message: "Your username and password are not corrected!" })
     }
 }
