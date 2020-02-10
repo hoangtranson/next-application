@@ -22,10 +22,9 @@ const signupPage = () => {
                     body: JSON.stringify({ username, password }),
                 })
                 if (response.status === 200) {
-                    const { token } = await response.json();
-                    await login({ token });
+                    const { username, password } = await response.json();
+                    await login({ token: password, username });
                 } else {
-                    console.log('Login failed.');
                     let error = new Error(response.statusText);
                     error.response = response;
                     throw error;

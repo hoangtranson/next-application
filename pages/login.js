@@ -25,7 +25,6 @@ const loginPage = () => {
                     const { username, password } = await response.json();
                     await login({ token: password, username });
                 } else {
-                    console.log('Login failed.');
                     let error = new Error(response.statusText);
                     error.response = response;
                     throw error;
