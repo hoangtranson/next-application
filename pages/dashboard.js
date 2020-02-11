@@ -5,28 +5,8 @@ import nextCookie from 'next-cookies';
 import Layout from '../components/layout.login';
 import getHost from '../utils/host.util';
 import { withAuthSync } from '../utils/auth.util';
-
+import { Message } from '../components/message';
 import { STATUS } from '../constants';
-
-const Message = props => {
-    if (props.message.status === STATUS.FAIL) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                {props.message.text}
-            </div>
-        )
-    }
-
-    if (props.message.status === STATUS.OK) {
-        return (
-            <div className="alert alert-success" role="alert">
-                {props.message.text}
-            </div>
-        )
-    }
-
-    return null;
-}
 
 const Avatar = props => {
     if (props.link) {

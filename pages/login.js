@@ -3,13 +3,28 @@ import Link from 'next/link';
 import fetch from 'isomorphic-unfetch';
 import Layout from '../components/layout';
 import { login } from '../utils/auth.util';
+import { STATUS } from '../constants';
+import { Message } from '../components/message';
 
 const loginPage = () => {
-    const [userData, setUserData] = useState({ username: '', password: '', error: '' });
+    const [userData, setUserData] = useState({ 
+        username: '', 
+        password: '', 
+        message: {
+            status: '',
+            text: ''
+        }
+    });
 
     const handleSubmit = async event => {
         event.preventDefault();
-        setUserData(Object.assign({}, userData, { error: '' }));
+        setUserData( prevState => ({
+            ...prevState,
+            message: {
+                status: '',
+                text: ''
+            }
+        }));
 
         const username = userData.username;
         const password = userData.password;
@@ -26,9 +41,14 @@ const loginPage = () => {
                     const { username, password } = await response.json();
                     await login({ token: password, username });
                 } else {
-                    let error = new Error(response.statusText);
-                    error.response = response;
-                    throw error;
+                    const { message } = await response.json();
+                    setUserData( prevState => ({
+                        ...prevState,
+                        message: {
+                            status: STATUS.FAIL,
+                            text: message
+                        }
+                    }));
                 }
             } catch (error) {
                 console.error(
@@ -44,6 +64,7 @@ const loginPage = () => {
         <Layout>
             <form className="form-signin text-center" onSubmit={handleSubmit}>
                 <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
+                <Message message={userData.message} />
                 <label htmlFor="username" className="sr-only">User Name</label>
                 <input
                     type="text"
@@ -71,7 +92,7 @@ const loginPage = () => {
                         )
                     }
                 />
-                <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <button className="btn btn-lg btn-primary btn-block" type="submit" >Login</button>
                 <Link href="/signup">
                     <a>Signup new account?</a>
                 </Link>
