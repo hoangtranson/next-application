@@ -22,7 +22,7 @@ const loginPage = () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password }),
                 })
-                if (response.status === 200) {
+                if (response.ok) {
                     const { username, password } = await response.json();
                     await login({ token: password, username });
                 } else {

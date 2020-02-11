@@ -52,24 +52,14 @@ const dashboardPage = props => {
 
 
     const updateMessage = ({ status, text }) => {
-        setUserData(
-            Object.assign({}, userData, {
-                message: {
-                    status,
-                    text
-                },
-                avatar: ''
-            })
-        )
-    }
-
-    const updateAvtLink = ({ id }) => {
-        setUserData(
-            Object.assign({}, userData, {
-                avatarLink: `http://localhost:3001/profile/${id}`
-            })
-        )
-        console.log('userData => ', userData);
+        setUserData( prevState => ({
+            ...prevState,
+            message: {
+                status,
+                text
+            },
+            avatar: ''
+        }));
     }
 
     const handleSubmit = async event => {
@@ -98,8 +88,15 @@ const dashboardPage = props => {
                         },
                         body: JSON.stringify({ avatarId: _res.id })
                     });
-                    updateAvtLink(_res);
-                    updateMessage({ status: STATUS.OK, text: 'Update Successfully!' });
+
+                    if (updateProfile.ok) {
+                        const response = await updateProfile.json();
+                        setUserData( prevState => ({
+                            ...prevState,
+                            avatarLink: `http://localhost:3001/profile/${response.avatar}`
+                        }));
+                        updateMessage({ status: STATUS.OK, text: 'Update Successfully!' });
+                    }
                 } else {
                     updateMessage({ status: STATUS.FAIL, text: 'Update Failed!' });
                 }
