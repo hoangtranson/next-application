@@ -8,9 +8,15 @@ const knex = require('knex')({
         charset: 'utf8'
     }
 });
-
 const bookshelf = require('bookshelf')(knex);
 
-export const User = bookshelf.model('User', {
-    tableName: 'users'
-});
+module.exports = function models(bookshelf) {
+
+    const User = bookshelf.model('User', {
+        tableName: 'users'
+    });
+
+    return {
+        User
+    };
+}(bookshelf);
