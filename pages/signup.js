@@ -1,20 +1,38 @@
 import React, { useState } from 'react';
 import fetch from 'isomorphic-unfetch';
 import Layout from '../components/layout';
+import { Message } from '../components/message';
 import { login } from '../utils/auth.util';
+import { userValidationSchema } from '../utils/validation';
+import { STATUS } from '../constants';
 
 const signupPage = () => {
-    const [userData, setUserData] = useState({ username: '', password: '', error: '' });
+    const [userData, setUserData] = useState({ 
+        username: '', 
+        password: '', 
+        message: {
+            status: '',
+            text: ''
+        } 
+    });
 
     const handleSubmit = async event => {
         event.preventDefault();
-        setUserData(Object.assign({}, userData, { error: '' }));
+        setUserData( prevState => ({
+            ...prevState,
+            message: {
+                status: '',
+                text: ''
+            }
+        }));
 
         const username = userData.username;
         const password = userData.password;
         const url = '/api/signup';
 
-        if (username && password) {
+        const validation = userValidationSchema.validate({ username, password });
+
+        if (!validation.error) {
             try {
                 const response = await fetch(url, {
                     method: 'POST',
@@ -35,6 +53,14 @@ const signupPage = () => {
                     error
                 );
             }
+        } else {
+            setUserData( prevState => ({
+                ...prevState,
+                message: {
+                    status: STATUS.FAIL,
+                    text: validation.error.details[0].message
+                }
+            }));
         }
 
     }
@@ -43,6 +69,7 @@ const signupPage = () => {
         <Layout>
             <form className="form-signin text-center" onSubmit={handleSubmit}>
                 <h1 className="h3 mb-3 font-weight-normal">Please sign up</h1>
+                <Message message={userData.message} />
                 <label htmlFor="username" className="sr-only">User Name</label>
                 <input
                     type="text"

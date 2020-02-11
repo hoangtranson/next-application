@@ -3,6 +3,7 @@ import Link from 'next/link';
 import fetch from 'isomorphic-unfetch';
 import Layout from '../components/layout';
 import { login } from '../utils/auth.util';
+import { userValidationSchema } from '../utils/validation';
 import { STATUS } from '../constants';
 import { Message } from '../components/message';
 
@@ -30,7 +31,9 @@ const loginPage = () => {
         const password = userData.password;
         const url = '/api/login';
 
-        if (username && password) {
+        const validation = userValidationSchema.validate({ username, password });
+
+        if (!validation.error) {
             try {
                 const response = await fetch(url, {
                     method: 'POST',
@@ -56,6 +59,14 @@ const loginPage = () => {
                     error
                 );
             }
+        } else {
+            setUserData( prevState => ({
+                ...prevState,
+                message: {
+                    status: STATUS.FAIL,
+                    text: validation.error.details[0].message
+                }
+            }));
         }
 
     }
