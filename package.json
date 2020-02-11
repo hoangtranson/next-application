@@ -1,19 +1,25 @@
 {
   "name": "next-application",
   "version": "1.0.0",
-  "description": "��#\u0000 \u0000n\u0000e\u0000x\u0000t\u0000-\u0000a\u0000p\u0000p\u0000l\u0000i\u0000c\u0000a\u0000t\u0000i\u0000o\u0000n\u0000\r\u0000 \u0000",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "commit": "npx git-cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "git-cz"
+    }
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hoangtranson/next-application.git"
   },
-  "author": "",
+  "author": "Tran Son Hoang (https://hoangtran.co)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/hoangtranson/next-application/issues"
@@ -22,6 +28,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "bookshelf": "^1.1.0",
+    "git-cz": "^4.3.1",
     "graphql-bookshelfjs": "^1.0.8",
     "isomorphic-unfetch": "^3.0.0",
     "js-cookie": "^2.2.1",
