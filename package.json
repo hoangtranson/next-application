@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/hoangtranson/next-application#readme",
   "dependencies": {
+    "@hapi/joi": "^17.1.0",
     "bcryptjs": "^2.4.3",
     "bookshelf": "^1.1.0",
     "git-cz": "^4.3.1",
