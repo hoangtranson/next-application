@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import fetch from 'isomorphic-unfetch';
 import Layout from '../components/layout';
 import { login } from '../utils/auth.util';
@@ -71,7 +72,9 @@ const loginPage = () => {
                     }
                 />
                 <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-                <a href="/signup">Signup new account?</a>
+                <Link href="/signup">
+                    <a>Signup new account?</a>
+                </Link>
             </form>
         </Layout>
     )
