@@ -43,10 +43,12 @@ const dashboardPage = props => {
     const [userData, setUserData] = useState({
         username: props.data.username,
         avatarLink: `http://localhost:3001/profile/${props.data.avatar}`,
-        avatar: '',
-        message: {
-            status: '',
-            text: ''
+        form: {
+            avatar: '',
+            message: {
+                status: '',
+                text: ''
+            }
         }
     });
 
@@ -54,11 +56,13 @@ const dashboardPage = props => {
     const updateMessage = ({ status, text }) => {
         setUserData( prevState => ({
             ...prevState,
-            message: {
-                status,
-                text
-            },
-            avatar: ''
+            form: {
+                message: {
+                    status,
+                    text
+                },
+                avatar: ''
+            }
         }));
     }
 
@@ -66,11 +70,14 @@ const dashboardPage = props => {
         event.preventDefault();
 
         setUserData(Object.assign({}, userData, { error: '' }));
-        const { username, avatar } = userData;
+        const { username, form } = userData;
         const url = 'http://localhost:3001/profile';
         const formData = new FormData();
-        formData.append('file', avatar);
-
+        formData.append('file', form.avatar);
+        if(props.data.avatar) {
+            formData.append('oldAvatar', props.data.avatar);
+        }
+        
         if (avatar) {
             try {
                 const response = await fetch(url, {
@@ -113,7 +120,7 @@ const dashboardPage = props => {
                 <Avatar link={userData.avatarLink} />
                 <hr />
                 <p>Update your profile here</p>
-                <Message message={userData.message} />
+                <Message message={userData.form.message} />
                 <label htmlFor="username" className="sr-only">User Name</label>
                 <input
                     type="text"
@@ -132,9 +139,13 @@ const dashboardPage = props => {
                     name="avatar"
                     className="form-control"
                     onChange={event =>
-                        setUserData(
-                            Object.assign({}, userData, { avatar: event.target.files[0] })
-                        )
+                        setUserData( prevState => ({
+                            ...prevState,
+                            form: {
+                                ...prevState.form,
+                                avatar: event.target.files[0]
+                            }
+                        }))
                     }
                 />
 
