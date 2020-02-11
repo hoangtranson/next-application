@@ -19,10 +19,9 @@ const Avatar = props => {
 }
 
 const dashboardPage = props => {
-    console.log('dashboardPage => ', props);
     const [userData, setUserData] = useState({
         username: props.data.username,
-        avatarLink: `http://localhost:3001/profile/${props.data.avatar}`,
+        avatarLink: `${process.env.UPLOAD_SERVICE_URL}/profile/${props.data.avatar}`,
         avatarId: props.data.avatar,
         form: {
             avatar: '',
@@ -52,11 +51,11 @@ const dashboardPage = props => {
 
         setUserData(Object.assign({}, userData, { error: '' }));
         const { username, form } = userData;
-        const url = 'http://localhost:3001/profile';
+        const url = `${process.env.UPLOAD_SERVICE_URL}/profile`;
         const formData = new FormData();
         formData.append('file', form.avatar);
-        if(avatarId) {
-            formData.append('oldAvatar', avatarId);
+        if(userData.avatarId) {
+            formData.append('oldAvatar', userData.avatarId);
         }
         
         if (avatar) {
@@ -81,7 +80,7 @@ const dashboardPage = props => {
                         const response = await updateProfile.json();
                         setUserData( prevState => ({
                             ...prevState,
-                            avatarLink: `http://localhost:3001/profile/${response.avatar}`,
+                            avatarLink: `${process.env.UPLOAD_SERVICE_URL}/profile/${response.avatar}`,
                             avatarId: response.avatar
                         }));
                         updateMessage({ status: STATUS.OK, text: 'Update Successfully!' });
